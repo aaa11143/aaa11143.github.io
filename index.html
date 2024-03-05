@@ -6,20 +6,20 @@
   <title>jump, jump!</title>
 </head>
 <body>
-  <button onclick="playsound()">aa</button>
+  <!-- <button onclick="playsound()">aa</button>
   <input id='x', placeholder="x">
   <input id='y', placeholder="y">
   <input id='width', placeholder="너비">
   <input id='height', placeholder="높이">
   <input id='color', placeholder="색">
-  <button id="aa">만들기</button>
+  <button id="aa">만들기</button> -->
   <canvas id="canvas"></canvas>
   <script>
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
 
-    canvas.width = 50;
-    canvas.height = 50;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
 
     var character = new Image();
     character.list = ["https://i.ibb.co/n8P6qBD/mario-move1.png", "https://i.ibb.co/y4MV1tJ/mario-move2.png", "https://i.ibb.co/K2r5ZNr/mario-move3.png", "https://i.ibb.co/yRy7FnH/mario-jump.png"];
