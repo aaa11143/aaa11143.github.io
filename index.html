@@ -13,6 +13,7 @@
   <input id='color', placeholder="색">
   <button id="aa">만들기</button>
   <canvas id="canvas"></canvas>
+  <button onclick="playsound()"></button>
   <script>
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
@@ -124,6 +125,11 @@
     canvas.addEventListener('touchend', function (event) {
       jumpMan.moving = false;
     });
+
+    function playsound() {
+      var audio = new Audio('bgm.mp3');
+      audio.play();
+    }
   </script>
 </body>
 </html>
