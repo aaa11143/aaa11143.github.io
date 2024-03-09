@@ -12,31 +12,42 @@
   <input id='width', placeholder="너비">
   <input id='height', placeholder="높이">
   <input id='color', placeholder="색">
-  <button id="aa">만들기</button> -->
-  <canvas id="canvas"></canvas>
+  <button id="aa">만들기</button> 
+  <position id="po"></position> -->
+  <div style="text-align:center">
+    <canvas id="canvas"></canvas>
+  </div>
   <script>
     var canvas = document.getElementById('canvas');
     var ctx = canvas.getContext('2d');
 
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
+    if (window.innerWidth < window.innerHeight) {
+      canvas.width = window.innerWidth - 50;
+      canvas.height = window.innerWidth - 50;
+    } else if (window.innerWidth > window.innerHeight) {
+      canvas.width = window.innerHeight - 50;
+      canvas.height = window.innerHeight - 50;
+    } else {
+      canvas.width = window.innerWidth - 50;
+      canvas.height = window.innerWidth - 50;
+    }
 
     var character = new Image();
     character.list = ["https://i.ibb.co/n8P6qBD/mario-move1.png", "https://i.ibb.co/y4MV1tJ/mario-move2.png", "https://i.ibb.co/K2r5ZNr/mario-move3.png", "https://i.ibb.co/yRy7FnH/mario-jump.png"];
-    character.src = character.list[0];
+    character.src = character.list[2];
   
-    blockX = [100,1,1,1,1];
-    blockY = [canvas.height - 100,1,1,1,1];
-    blockWidth = [50,1,1,1,1];
-    blockHeight = [50,1,1,1,1];
-    blockColor = ['red','red','red','red','red'];
+    blockX = [150];
+    blockY = [100];
+    blockWidth = [50];
+    blockHeight = [50];
+    blockColor = ['red'];
 
     var jumpMan = {
-      x: 10,
-      y: canvas.height - 50,
-      width: 10,
-      height:20,
-      speed: 3,
+      x: canvas.width / 10,
+      y: canvas.height,
+      height: canvas.height /7.5,
+      width: canvas.height / 15,
+      speed: canvas.width / 50,
       moving: false,
       movingLeft: false, // 추가된 속성
       jumpingTime: 0,
@@ -70,28 +81,36 @@
       animation = requestAnimationFrame(iteration);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       jumpMan.draw();
+      ctx.fillStyle = 'red'
+      ctx.fillRect(0, 0, 10, canvas.height)
+      ctx.fillRect(0, 0, canvas.width, 10)
+      ctx.fillRect(canvas.width, canvas.height, -canvas.width, -10)
+      ctx.fillRect(canvas.width, canvas.height, -10, -canvas.height)
       
+      ctx.fillRect(jumpMan.x, jumpMan.y, 1, 1)
+
+      //document.getElementById('po').innerHTML = `${canvas.height-100}, ${jumpMan.y}`
       for(i=0;i != blockX.length; i++) {
         block.draw(blockX[i], blockY[i], blockWidth[i], blockHeight[i], blockColor[i])
       }
 
-      document.getElementById('aa').addEventListener('click', function() {
+      /* document.getElementById('aa').addEventListener('click', function() {
         //block.draw(parseInt(document.getElementById('x').value), parseInt(document.getElementById('y').value), 50, 50, 'black');
         blockX.push(parseInt(document.getElementById('x').value));
         blockY.push(parseInt(document.getElementById('y').value));
         blockWidth.push(parseInt(document.getElementById('width').value));
         blockHeight.push(parseInt(document.getElementById('height').value));
         blockColor.push(document.getElementById('color').value);
-      });
+      }); */
 
       if (jumpMan.jumping) {
         jumpMan.y -= 5;
         jumpMan.jumpingTime += 1;
-        if (jumpMan.jumpingTime == 60) { // 점프 시간이 60이 되면 점프 종료
+        if (jumpMan.jumpingTime == 10) { // 점프 시간이 60이 되면 점프 종료
           jumpMan.jumping = false;
           jumpMan.jumpingTime = 0;
         }
-      } else if (jumpMan.y != canvas.height - 100) { // 점프 중이 아니면서 캐릭터가 땅에 있지 않으면 아래로 이동
+      } else if (jumpMan.y < canvas.height - 100) { // 점프 중이 아니면서 캐릭터가 땅에 있지 않으면 아래로 이동
         jumpMan.y += 6;
       }
 
@@ -126,10 +145,10 @@
       jumpMan.moving = false;
     });
 
-    function playsound() {
+    /* function playsound() {
       var audio = new Audio('bgm.mp3');
       audio.play();
-    }
+    } */
   </script>
 </body>
 </html>
