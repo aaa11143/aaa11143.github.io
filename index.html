@@ -1,9 +1,17 @@
-
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8">
   <title>jump, jump!</title>
+  <style>
+    .button {
+      height : 100px;
+      width : 100px;
+      font-size : 50px;
+      text-align : center;
+      font-weight : bold;
+    }
+  </style>
 </head>
 <body>
   <!-- <button onclick="playsound()">aa</button>
@@ -15,7 +23,11 @@
   <button id="aa">만들기</button> 
   <position id="po"></position> -->
   <div style="text-align:center">
-    <canvas id="canvas"></canvas>
+    <canvas id="canvas"></canvas><br>
+    <button id="up" class="button">&#x2191</button><br>
+    <button id="left" class="button" onclick="jumpMan.moving = true; jumpMan. movingLeft = true">&#x2190</button>
+<h>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h>
+    <button id="right" class="button" onclick="jumpMan.moving=true; jumpMan.movingLeft=false">&#x2192</button>
   </div>
   <script>
     var canvas = document.getElementById('canvas');
@@ -35,6 +47,9 @@
     var character = new Image();
     character.list = ["https://i.ibb.co/n8P6qBD/mario-move1.png", "https://i.ibb.co/y4MV1tJ/mario-move2.png", "https://i.ibb.co/K2r5ZNr/mario-move3.png", "https://i.ibb.co/yRy7FnH/mario-jump.png"];
     character.src = character.list[2];
+
+    var bgi = new Image();
+    bgi.src = "https://mblogthumb-phinf.pstatic.net/MjAxOTAzMDZfMTM3/MDAxNTUxODE0NTI0NDkz.RvXlYv6p5xPwXrOIPfABgFuiknuTn0iFZNuUguVYc_og.ii04J6D96C6FKQSXQzy9DABBNk7vNuU343nmAquhmZgg.JPEG.mong728/%EC%B4%88%EA%B3%A0%ED%99%94%EC%A7%88_%EC%BB%B4%ED%93%A8%ED%84%B0_%EB%B0%B0%EA%B2%BD%ED%99%94%EB%A9%B4_(7).jpg?type=w800";
   
     blockX = [150];
     blockY = [100];
@@ -44,19 +59,19 @@
 
     var jumpMan = {
       x: canvas.width / 10,
-      y: canvas.height,
-      height: canvas.height /7.5,
+      y: canvas.height - canvas.height / 7.5,
+      height: canvas.height / 7.5,
       width: canvas.height / 15,
       speed: canvas.width / 50,
       moving: false,
-      movingLeft: false, // 추가된 속성
+      movingLeft: false, 
       jumpingTime: 0,
       jumping: false,
       jumpable: true,
       draw() {
         ctx.fillStyle = 'green';
         ctx.fillRect(this.x, this.y - 50, this.width, this.height);
-        ctx.drawImage(character, this.x, this.y - 50); // 이미지 그리기 추가
+        ctx.drawImage(character, this.x, this.y - 50, this.width, this.height);
       },
       moveLeft() {
         if (this.x > 0) {
@@ -80,16 +95,14 @@
     function iteration() {
       animation = requestAnimationFrame(iteration);
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.drawImage(bgi, 0, 0, canvas.width, canvas.height)
       jumpMan.draw();
       ctx.fillStyle = 'red'
-      ctx.fillRect(0, 0, 10, canvas.height)
-      ctx.fillRect(0, 0, canvas.width, 10)
-      ctx.fillRect(canvas.width, canvas.height, -canvas.width, -10)
-      ctx.fillRect(canvas.width, canvas.height, -10, -canvas.height)
-      
-      ctx.fillRect(jumpMan.x, jumpMan.y, 1, 1)
+      ctx.fillRect(0, 0, 10, canvas.height);
+      ctx.fillRect(0, 0, canvas.width, 10);
+      ctx.fillRect(canvas.width - 10, 0, 10, canvas.height);
+      ctx.fillRect(0, canvas.height - 10, canvas.width, 10);
 
-      //document.getElementById('po').innerHTML = `${canvas.height-100}, ${jumpMan.y}`
       for(i=0;i != blockX.length; i++) {
         block.draw(blockX[i], blockY[i], blockWidth[i], blockHeight[i], blockColor[i])
       }
@@ -106,11 +119,11 @@
       if (jumpMan.jumping) {
         jumpMan.y -= 5;
         jumpMan.jumpingTime += 1;
-        if (jumpMan.jumpingTime == 10) { // 점프 시간이 60이 되면 점프 종료
+        if (jumpMan.jumpingTime == 10) { 
           jumpMan.jumping = false;
           jumpMan.jumpingTime = 0;
         }
-      } else if (jumpMan.y < canvas.height - 100) { // 점프 중이 아니면서 캐릭터가 땅에 있지 않으면 아래로 이동
+      } else if (jumpMan.y + jumpMan.height / 2 < canvas.height) {  
         jumpMan.y += 6;
       }
 
@@ -127,12 +140,13 @@
 
     iteration();
 
-    canvas.addEventListener('touchstart', function (event) {
+    /* canvas.addEventListener('touchstart', function (event) {
       var touchPosition = [event.touches[0].clientX, event.touches[0].clientY];
 
       if (touchPosition[1] < canvas.height / 3 && !jumpMan.jumping) {
         jumpMan.jumping = true;
-      } else if (touchPosition[0] < canvas.width / 2) {
+      } 
+      if (touchPosition[0] < canvas.width / 2) {
         jumpMan.moving = true;
         jumpMan.movingLeft = true;
       } else {
@@ -143,7 +157,29 @@
 
     canvas.addEventListener('touchend', function (event) {
       jumpMan.moving = false;
-    });
+    }); */
+
+    document.getElementById('up').addEventListener('mousedown', function() {
+      jumpMan.jumping = true;
+    })
+
+    document.getElementById('left').addEventListener('mousedown', function() {
+      jumpMan.moving = true;
+      jumpMan.movingLeft = true;
+    })
+
+    document.getElementById('right').addEventListener('mousedown', function() {
+      jumpMan.moving = true;
+      jumpMan.movingLeft = false;
+    })
+
+    document.getElementById('left').addEventListener('mouseup', function() {
+      jumpMan.moving = false;
+    })
+
+    document.getElementById('right').addEventListener('mouseup', function() {
+      jumpMan.moving = false;
+    })
 
     /* function playsound() {
       var audio = new Audio('bgm.mp3');
