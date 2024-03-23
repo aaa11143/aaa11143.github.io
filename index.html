@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -5,29 +6,29 @@
   <title>jump, jump!</title>
   <style>
     .button {
-      height : 100px;
-      width : 100px;
-      font-size : 50px;
-      text-align : center;
-      font-weight : bold;
+      height: 100px;
+      width: 100px;
+      font-size: 50px;
+      text-align: center;
+      font-weight: bold;
     }
   </style>
 </head>
 <body>
-  <!-- <button onclick="playsound()">aa</button>
-  <input id='x', placeholder="x">
-  <input id='y', placeholder="y">
-  <input id='width', placeholder="너비">
-  <input id='height', placeholder="높이">
-  <input id='color', placeholder="색">
-  <button id="aa">만들기</button> 
-  <position id="po"></position> -->
+  <h id="h">@</h>
+  <button onclick="playsound()">aa</button>
+  <input id='x' placeholder="x">
+  <input id='y' placeholder="y">
+  <input id='width' placeholder="너비">
+  <input id='height' placeholder="높이">
+  <input id='color' placeholder="색">
+  <button id="aa">만들기</button>
   <div style="text-align:center">
     <canvas id="canvas"></canvas><br>
     <button id="up" class="button">&#x2191</button><br>
-    <button id="left" class="button" onclick="jumpMan.moving = true; jumpMan. movingLeft = true">&#x2190</button>
-<h>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h>
-    <button id="right" class="button" onclick="jumpMan.moving=true; jumpMan.movingLeft=false">&#x2192</button>
+    <button id="left" class="button">&#x2190</button>
+    <h>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</h>
+    <button id="right" class="button">&#x2192</button>
   </div>
   <script>
     var canvas = document.getElementById('canvas');
@@ -45,17 +46,19 @@
     }
 
     var character = new Image();
-    character.list = ["https://i.ibb.co/n8P6qBD/mario-move1.png", "https://i.ibb.co/y4MV1tJ/mario-move2.png", "https://i.ibb.co/K2r5ZNr/mario-move3.png", "https://i.ibb.co/yRy7FnH/mario-jump.png"];
-    character.src = character.list[2];
+    character.list = ["https://i.ibb.co/CHD3HzP/7-20240323132236.png", "https://i.ibb.co/n8P6qBD/mario-move1.png", "https://i.ibb.co/y4MV1tJ/mario-move2.png", "https://i.ibb.co/K2r5ZNr/mario-move3.png", "https://i.ibb.co/yRy7FnH/mario-jump.png"];
+    character.src = character.list[0];
 
     var bgi = new Image();
     bgi.src = "https://mblogthumb-phinf.pstatic.net/MjAxOTAzMDZfMTM3/MDAxNTUxODE0NTI0NDkz.RvXlYv6p5xPwXrOIPfABgFuiknuTn0iFZNuUguVYc_og.ii04J6D96C6FKQSXQzy9DABBNk7vNuU343nmAquhmZgg.JPEG.mong728/%EC%B4%88%EA%B3%A0%ED%99%94%EC%A7%88_%EC%BB%B4%ED%93%A8%ED%84%B0_%EB%B0%B0%EA%B2%BD%ED%99%94%EB%A9%B4_(7).jpg?type=w800";
   
-    blockX = [150];
-    blockY = [100];
-    blockWidth = [50];
-    blockHeight = [50];
-    blockColor = ['red'];
+    var blockX = [300, 300];
+    var blockY = [canvas.height - 50, canvas.height - 100];
+    var blockWidth = [50, 50];
+    var blockHeight = [50, 50];
+    var blockColor = ['red', 'black'];
+    var characterAnimation = 0;
+
 
     var jumpMan = {
       x: canvas.width / 10,
@@ -69,19 +72,14 @@
       jumping: false,
       jumpable: true,
       draw() {
-        ctx.fillStyle = 'green';
-        ctx.fillRect(this.x, this.y - 50, this.width, this.height);
-        ctx.drawImage(character, this.x, this.y - 50, this.width, this.height);
-      },
-      moveLeft() {
-        if (this.x > 0) {
-          this.x -= this.speed;
+        ctx.save();
+        if (this.movingLeft) {
+          ctx.scale(-1, 1);
+          ctx.drawImage(character, -this.x - this.width, this.y - 50, this.width, this.height);
+        } else {
+          ctx.drawImage(character, this.x, this.y - 50, this.width, this.height);
         }
-      },
-      moveRight() {
-        if (this.x + this.width < canvas.width) {
-          this.x += this.speed;
-        }
+        ctx.restore();
       }
     }
 
@@ -97,94 +95,106 @@
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.drawImage(bgi, 0, 0, canvas.width, canvas.height)
       jumpMan.draw();
-      ctx.fillStyle = 'red'
-      ctx.fillRect(0, 0, 10, canvas.height);
-      ctx.fillRect(0, 0, canvas.width, 10);
-      ctx.fillRect(canvas.width - 10, 0, 10, canvas.height);
-      ctx.fillRect(0, canvas.height - 10, canvas.width, 10);
-
-      for(i=0;i != blockX.length; i++) {
-        block.draw(blockX[i], blockY[i], blockWidth[i], blockHeight[i], blockColor[i])
+      if (jumpMan.moving) {
+        characterAnimation += 1;
+      }
+      if (!jumpMan.moving) {
+        setTimeout(function() {
+          if (!jumpMan.moving) {
+            characterAnimation = 0;
+            character.src = character.list[0]
+          }
+        }, 2000);
       }
 
-      /* document.getElementById('aa').addEventListener('click', function() {
-        //block.draw(parseInt(document.getElementById('x').value), parseInt(document.getElementById('y').value), 50, 50, 'black');
+      document.getElementById('aa').addEventListener('click', function() {
         blockX.push(parseInt(document.getElementById('x').value));
         blockY.push(parseInt(document.getElementById('y').value));
         blockWidth.push(parseInt(document.getElementById('width').value));
         blockHeight.push(parseInt(document.getElementById('height').value));
         blockColor.push(document.getElementById('color').value);
-      }); */
+      });
 
-      if (jumpMan.jumping) {
+      if (jumpMan.jumping && jumpMan.jumpable) {
         jumpMan.y -= 5;
         jumpMan.jumpingTime += 1;
-        if (jumpMan.jumpingTime == 10) { 
+        if (jumpMan.jumpingTime == 20) { 
           jumpMan.jumping = false;
           jumpMan.jumpingTime = 0;
         }
       } else if (jumpMan.y + jumpMan.height / 2 < canvas.height) {  
+        jumpMan.jumpable = false; 
         jumpMan.y += 6;
       }
 
       if (jumpMan.moving) {
         if (jumpMan.movingLeft) {
-          jumpMan.moveLeft();
+          if(jumpMan.x > 0) {
+            jumpMan.x -= jumpMan.speed;
+          }
         } else {
-          jumpMan.moveRight();
+          if (jumpMan.x + jumpMan.width < canvas.width) {
+            jumpMan.x += jumpMan.speed;
+          }
         }
       }
+
+      if (jumpMan.y + jumpMan.height / 2 >= canvas.height) {  
+        jumpMan.jumpable = true; 
+      }
+
+      if (jumpMan.jumping == false) {
+        if (characterAnimation == 10 * 1) {
+           character.src = character.list[1];
+        } else if (characterAnimation == 10 * 2) {
+          character.src = character.list[2];
+        } else if (characterAnimation == 10 * 3) {
+          character.src = character.list[3];
+        } else if (characterAnimation > 10 * 3) {
+          characterAnimation = 0;
+        }
+      }
+
+      blocks.forEach((a, i, o)=>{
+        aGgeBbang(jumpMan, a, i, o)
+        a.draw(blockX[i], blockY[i], blockWidth[i], blockHeight[i], blockColor[i]);
+      })
     }
 
     var block = new Block();
-
+    var blocks = [block];
     iteration();
 
-    /* canvas.addEventListener('touchstart', function (event) {
-      var touchPosition = [event.touches[0].clientX, event.touches[0].clientY];
+    function aGgeBbang(jumpMan, block, whatIsThis, whatIsThis22) {
+      var xGap = blockX[whatIsThis] - (jumpMan.x + jumpMan.width);
+      var yGap = blockY[whatIsThis] - (jumpMan.y + jumpMan.height);
+     
+      document.getElementById('h').innerHTML = `${xGap}, ${yGap}`;
 
-      if (touchPosition[1] < canvas.height / 3 && !jumpMan.jumping) {
-        jumpMan.jumping = true;
-      } 
-      if (touchPosition[0] < canvas.width / 2) {
-        jumpMan.moving = true;
-        jumpMan.movingLeft = true;
-      } else {
-        jumpMan.moving = true;
-        jumpMan.movingLeft = false;
+      if (xGap < 0 && yGap < 0) {
+        //alert('@');
       }
-    });
+    }
 
-    canvas.addEventListener('touchend', function (event) {
-      jumpMan.moving = false;
-    }); */
-
-    document.getElementById('up').addEventListener('mousedown', function() {
-      jumpMan.jumping = true;
-    })
-
-    document.getElementById('left').addEventListener('mousedown', function() {
+    document.getElementById('up').addEventListener('touchstart', () => jumpMan.jumping = true);
+    document.getElementById('left').addEventListener('touchstart', () => {
       jumpMan.moving = true;
       jumpMan.movingLeft = true;
-    })
-
-    document.getElementById('right').addEventListener('mousedown', function() {
+    });
+    document.getElementById('right').addEventListener('touchstart', () => {
       jumpMan.moving = true;
       jumpMan.movingLeft = false;
-    })
+    });
+    document.getElementById('up').addEventListener('touchend', () => jumpMan.jumping = false);
+    document.getElementById('left').addEventListener('touchend', () => jumpMan.moving = false);
+    document.getElementById('right').addEventListener('touchend', () => jumpMan.moving = false);
 
-    document.getElementById('left').addEventListener('mouseup', function() {
-      jumpMan.moving = false;
-    })
 
-    document.getElementById('right').addEventListener('mouseup', function() {
-      jumpMan.moving = false;
-    })
-
-    /* function playsound() {
+    function playsound() {
       var audio = new Audio('bgm.mp3');
       audio.play();
-    } */
+    }
   </script>
 </body>
+<body oncontextmenu="return false" onselectstart="return false" ondragstart="return false" onkeydown="return false">
 </html>
