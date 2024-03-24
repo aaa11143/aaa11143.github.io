@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html>
 <head>
@@ -167,12 +166,12 @@
 
     function aGgeBbang(jumpMan, block, whatIsThis, whatIsThis22) {
       var xGap = blockX[whatIsThis] - (jumpMan.x + jumpMan.width);
-      var yGap = blockY[whatIsThis] - (jumpMan.y + jumpMan.height);
+      var yGap = blockY[whatIsThis] - (jumpMan.y + jumpMan.height / 2);
      
       document.getElementById('h').innerHTML = `${xGap}, ${yGap}`;
 
       if (xGap < 0 && yGap < 0) {
-        //alert('@');
+        alert('@');
       }
     }
 
