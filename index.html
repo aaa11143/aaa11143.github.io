@@ -173,6 +173,7 @@
 
       if (xGap < 0 && yGap < 0) {
         if (jumpMan.movingLeft == false) {
+          document.getElementById('right').disabled = true;
           jumpMan.moving = false
         }
       }
