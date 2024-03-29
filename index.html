@@ -172,7 +172,8 @@
       document.getElementById('h').innerHTML = `${xGap}, ${yGap}`;
 
       if (xGap < 0 && yGap < 0) {
-        // alert('@');
+        if (jumpMan.movingLeft == false) {
+          jumpMan.moving  = false
       }
     }
 
