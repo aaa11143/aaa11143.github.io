@@ -173,7 +173,7 @@
      
       document.getElementById('h').innerHTML = `${xGap}, ${yGap}`;
 
-      if (xGap < 0 && yGap < 0) {
+      if (xGap < 0 && yGap < 0 && blockX[whatIsThis] + blockWidth[whatIsThis] < jumpMan.x) {
         if (jumpMan.movingLeft == false) {
           jumpMan.moving = false
         }
