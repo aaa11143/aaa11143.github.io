@@ -128,17 +128,7 @@
         jumpMan.y += 6;
       }
 
-      if (jumpMan.moving) {
-        if (jumpMan.movingLeft) {
-          if(jumpMan.x > 0) {
-            jumpMan.x -= jumpMan.speed;
-          }
-        } else {
-          if (jumpMan.x + jumpMan.width < canvas.width) {
-            jumpMan.x += jumpMan.speed;
-          }
-        }
-      }
+
 
       if (jumpMan.y + jumpMan.height / 2 >= canvas.height) {  
         jumpMan.jumpable = true; 
@@ -160,6 +150,17 @@
         aGgeBbang(jumpMan, a, i, o)
         a.draw(blockX[i], blockY[i], blockWidth[i], blockHeight[i], blockColor[i]);
       })
+     if (jumpMan.moving) {
+        if (jumpMan.movingLeft) {
+          if(jumpMan.x > 0) {
+            jumpMan.x -= jumpMan.speed;
+          }
+        } else {
+          if (jumpMan.x + jumpMan.width < canvas.width) {
+            jumpMan.x += jumpMan.speed;
+          }
+        }
+      }
     }
 
     var block = new Block();
@@ -174,7 +175,6 @@
 
       if (xGap < 0 && yGap < 0) {
         if (jumpMan.movingLeft == false) {
-          document.getElementById('right').disabled = true;
           jumpMan.moving = false
         }
       }
