@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -28,6 +27,12 @@
             var item = document.createElement('li');
             item.textContent = msg;
             messages.appendChild(item);
+        });
+
+        var form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            sendMessage();
         });
     </script>
 </body>
