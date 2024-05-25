@@ -19,24 +19,7 @@
     </style>
 </head>
 <body>
-  <div class="header"><image src="LOGO.png" height=50px width=50px id="logo"></image></div>
+  <div class="header"><a href="index.html"><image src="LOGO.png" height=50px width=50px id="logo"></image></a></div>
   <button onclick="location.href='jump/index.html'">PLAY jump, jump!</button>
-  
-  <script>
-    function changeLogoColor() {
-      animation = requestAnimationFrame(changeLogoColor);
-      const logo = document.getElementById('logo');
-      const colors = ['red', 'green', 'blue', 'yellow', 'purple'];
-      const currentColor = logo.style.color;
-      let newColor = colors[Math.floor(Math.random() * colors.length)];
-
-      while (newColor === currentColor) {
-        newColor = colors[Math.floor(Math.random() * colors.length)];
-      };
-
-      logo.style.color = newColor;
-    }
-    changeLogoColor()
-  </script>
 </body>
 </html>
