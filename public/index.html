@@ -1,0 +1,62 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Chat</title>
+    <style>
+        #chat-output {
+            border: 1px solid #000;
+            height: 300px;
+            overflow-y: scroll;
+            margin-bottom: 10px;
+        }
+        #message-input {
+            width: calc(100% - 60px);
+            margin-right: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-output"></div>
+    <input type="text" id="message-input">
+    <button id="send-button">Send</button>
+
+    <script>
+        const chatOutput = document.getElementById('chat-output');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
+
+        // 웹 소켓 연결
+        const socket = new WebSocket('wss://localhost:8080');
+
+        // 메시지 수신 시 처리
+        socket.onmessage = function(event) {
+            const message = event.data;
+            chatOutput.innerHTML += '<p>' + message + '</p>';
+            chatOutput.scrollTop = chatOutput.scrollHeight;
+        };
+
+        // 메시지 전송
+        sendButton.onclick = function() {
+            const message = messageInput.value.trim();
+            if (message) {
+                socket.send(message);
+                messageInput.value = '';
+
+                // 전송한 메시지를 채팅 창에 추가
+                chatOutput.innerHTML += '<p><strong>나:</strong> ' + message + '</p>';
+                chatOutput.scrollTop = chatOutput.scrollHeight;
+            }
+        };
+
+        // 엔터 키로 메시지 전송
+        messageInput.addEventListener('keypress', function(event) {
+            if (event.key === 'Enter') {
+                sendButton.onclick();
+            }
+        });
+    </script>
+</body>
+</html>
